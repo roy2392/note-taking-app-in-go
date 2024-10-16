@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"example.com/note/note"
+	"example.com/note/todo"
 	"fmt"
 	"os"
 	"strings"
@@ -10,6 +11,24 @@ import (
 
 func main() {
 	title, content := getNoteData()
+
+	todoText := getUserInput("Todo Text: ")
+
+	todo, err := todo.New(todoText)
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+
+	todo.Display()
+	err = todo.Save()
+
+	if err != nil {
+		fmt.Println("Saving the todo failed:", err)
+		return
+	}
+
+	fmt.Println("Todo saved successfully!")
 
 	userNote, err := note.New(title, content)
 	if err != nil {
@@ -25,7 +44,6 @@ func main() {
 		return
 	}
 	fmt.Println("Note saved successfully!")
-
 }
 
 func getNoteData() (string, string) {
